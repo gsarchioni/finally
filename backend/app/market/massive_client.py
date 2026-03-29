@@ -6,7 +6,7 @@ import asyncio
 import logging
 
 from massive import RESTClient
-from massive.rest.models import SnapshotMarketType
+from massive.rest.models import SnapshotMarketType, TickerSnapshot
 
 from .cache import PriceCache
 from .interface import MarketDataSource
@@ -120,7 +120,7 @@ class MassiveDataSource(MarketDataSource):
             # Don't re-raise — the loop will retry on the next interval.
             # Common failures: 401 (bad key), 429 (rate limit), network errors.
 
-    def _fetch_snapshots(self) -> list:
+    def _fetch_snapshots(self) -> list[TickerSnapshot]:
         """Synchronous call to the Massive REST API. Runs in a thread."""
         return self._client.get_snapshot_all(
             market_type=SnapshotMarketType.STOCKS,

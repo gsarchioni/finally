@@ -116,6 +116,25 @@ class TestGBMSimulator:
         corr = GBMSimulator._pairwise_correlation("AAPL", "JPM")
         assert corr == 0.3
 
+    def test_add_ticker_normalizes_case(self):
+        """Test that add_ticker normalizes to uppercase."""
+        sim = GBMSimulator(tickers=["AAPL"])
+        sim.add_ticker("googl")
+        assert "GOOGL" in sim.get_tickers()
+        assert "googl" not in sim.get_tickers()
+
+    def test_add_ticker_strips_whitespace(self):
+        """Test that add_ticker strips leading/trailing whitespace."""
+        sim = GBMSimulator(tickers=["AAPL"])
+        sim.add_ticker("  GOOGL  ")
+        assert "GOOGL" in sim.get_tickers()
+
+    def test_remove_ticker_normalizes_case(self):
+        """Test that remove_ticker normalizes to uppercase."""
+        sim = GBMSimulator(tickers=["AAPL", "GOOGL"])
+        sim.remove_ticker("googl")
+        assert "GOOGL" not in sim.get_tickers()
+
     def test_default_dt_is_reasonable(self):
         """Test that default dt is a reasonable small value."""
         assert 0 < GBMSimulator.DEFAULT_DT < 0.0001

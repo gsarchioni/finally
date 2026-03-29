@@ -10,6 +10,7 @@ dependencies = [
     "numpy>=2.0.0",
     "massive>=1.0.0",
     "rich>=13.0.0",
+    "httpx[dev]>=0.28.1",
 ]
 
 [project.optional-dependencies]
