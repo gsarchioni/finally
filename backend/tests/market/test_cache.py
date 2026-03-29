@@ -101,3 +101,38 @@ class TestPriceCache:
         cache = PriceCache()
         update = cache.update("AAPL", 190.12345)
         assert update.price == 190.12
+
+    def test_version_increments_on_remove(self):
+        """Test that version increments when a ticker is removed."""
+        cache = PriceCache()
+        cache.update("AAPL", 190.00)
+        v_before = cache.version
+        cache.remove("AAPL")
+        assert cache.version == v_before + 1
+
+    def test_version_unchanged_on_remove_nonexistent(self):
+        """Test that version does not increment when removing a nonexistent ticker."""
+        cache = PriceCache()
+        v_before = cache.version
+        cache.remove("NOPE")
+        assert cache.version == v_before
+
+    def test_tickers(self):
+        """Test the tickers() method returns tracked symbols."""
+        cache = PriceCache()
+        cache.update("AAPL", 190.00)
+        cache.update("GOOGL", 175.00)
+        assert cache.tickers() == {"AAPL", "GOOGL"}
+
+    def test_tickers_empty(self):
+        """Test tickers() on empty cache."""
+        cache = PriceCache()
+        assert cache.tickers() == set()
+
+    def test_tickers_after_remove(self):
+        """Test tickers() after removing a ticker."""
+        cache = PriceCache()
+        cache.update("AAPL", 190.00)
+        cache.update("GOOGL", 175.00)
+        cache.remove("AAPL")
+        assert cache.tickers() == {"GOOGL"}

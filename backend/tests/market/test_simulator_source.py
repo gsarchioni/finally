@@ -136,3 +136,27 @@ class TestSimulatorDataSource:
         # Just verify it starts and stops cleanly
         await asyncio.sleep(0.2)
         await source.stop()
+
+    async def test_add_ticker_normalizes_case(self):
+        """Test that add_ticker normalizes to uppercase."""
+        cache = PriceCache()
+        source = SimulatorDataSource(price_cache=cache, update_interval=0.1)
+        await source.start(["AAPL"])
+
+        await source.add_ticker("googl")
+        assert "GOOGL" in source.get_tickers()
+        assert cache.get("GOOGL") is not None
+
+        await source.stop()
+
+    async def test_remove_ticker_normalizes_case(self):
+        """Test that remove_ticker normalizes to uppercase."""
+        cache = PriceCache()
+        source = SimulatorDataSource(price_cache=cache, update_interval=0.1)
+        await source.start(["AAPL", "GOOGL"])
+
+        await source.remove_ticker("googl")
+        assert "GOOGL" not in source.get_tickers()
+        assert cache.get("GOOGL") is None
+
+        await source.stop()

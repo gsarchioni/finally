@@ -24,6 +24,7 @@ from app.market import PriceCache, PriceUpdate, MarketDataSource, create_market_
   - `get(ticker) -> PriceUpdate | None`
   - `get_price(ticker) -> float | None`
   - `get_all() -> dict[str, PriceUpdate]`
+  - `tickers() -> set[str]` — set of tracked ticker symbols
   - `remove(ticker)`
   - `version` property — monotonic counter, increments on every update (for SSE change detection)
 
