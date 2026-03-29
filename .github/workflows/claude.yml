@@ -53,3 +53,5 @@ jobs:
                 "ANTHROPIC_BASE_URL": "${{ secrets.ANTHROPIC_BASE_URL }}"
               }
             }
+          claude_args: |
+            --model claude-opus-4-6
